@@ -42,11 +42,17 @@ Check out the [website](https://eventzforu.herokuapp.com/)
 ### 1. Install python
 > https://realpython.com/installing-python/
 ### 2. Clone this repo into your local machine 
-> git clone https://github.com/AdityaAshvin/EventsForU.git
+> git clone https://github.com/tabbott207/CircleEvents
+> ### 3. CD into CircleEvents and set up VirtualEnv
+> pip3 install virtualenv
+> python3 -m venv env
+> on MacOS/Linux: source env/bin/activate
+> on Windows: .\env\Scripts\activate
+
 ### 3. Install django
-> pip install django
+> pip3 install django
 ### 4. Install required dependencies
-> pip install -r requirements.txt
+> pip3 install -r requirements.txt
 ### 5. Final Step
 > go to the directory where manage.py is located and run the following command
 >
