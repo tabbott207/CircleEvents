@@ -1,30 +1,30 @@
 asgiref==3.8.1
-astroid==2.17.0  # Latest version
+astroid==3.1.0
 certifi==2024.8.30
-cffi==1.17.6  # Latest version
-chardet==5.0.0  # Latest version, replacing chardet 3.x as it is now deprecated
-cryptography==39.0.1  # Latest stable version
-defusedxml==0.8.0  # Latest stable version
-Django==5.1.3  # Latest stable version (Django 5.x)
-gunicorn==20.1.0  # Latest version
-idna==3.4  # Latest version
-isort==5.12.0  # Latest version
+cffi==1.17.1
+chardet==5.0.0
+cryptography==39.0.1
+defusedxml==0.7.1
+Django==5.1.3
+gunicorn==20.1.0
+idna==3.4
+isort==5.12.0
 lazy-object-proxy==1.10.0
-mccabe==0.7.0  # Latest version
-oauthlib==3.2.0  # Latest stable version
+mccabe==0.7.0
+oauthlib==3.2.0
 optional-django==0.1.0
 pycparser==2.20
-PyJWT==2.7.0  # Latest version
-pylint==2.16.0  # Latest stable version
+PyJWT==2.7.0
+pylint==3.1.0  # Updated to avoid conflict with astroid==3.3.5
 python3-openid==3.2.0
-pytz==2023.3  # Latest version
-requests==2.31.0  # Latest version
-requests-oauthlib==1.3.1  # Latest version
+pytz==2023.3
+requests==2.31.0
+requests-oauthlib==1.3.1
 six==1.16.0
-social-auth-app-django==5.0.0  # Latest version
-social-auth-core==5.0.0  # Latest version
-sqlparse==0.6.2  # Latest version
-toml==0.10.2  # Latest version
-urllib3==1.26.15  # Latest version
-whitenoise==6.8.2  # Latest version
-wrapt==1.14.0  # Latest version
+social-auth-app-django==5.0.0
+social-auth-core==4.5.4
+sqlparse==0.5.1
+toml==0.10.2
+urllib3==1.26.15
+whitenoise==6.8.2
+wrapt==1.14.0
