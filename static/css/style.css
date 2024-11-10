@@ -1,0 +1,193 @@
+/* General reset and styling */
+*, *:before, *:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Nunito', sans-serif;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: -webkit-linear-gradient(left, #7579ff, #b224ef);
+  background-image: url('../img/loginpic.jpg') !important;
+  background-size: cover;
+  background-position: center;
+}
+
+input, button {
+  border: none;
+  outline: none;
+  background: none;
+}
+
+h2 {
+  width: 100%;
+  font-size: 30px;
+  text-align: center;
+}
+
+label {
+  display: block;
+  width: 100%;
+  margin: 15px 0;
+  text-align: left;
+}
+
+label span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #505f75;
+  text-transform: uppercase;
+}
+
+input {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  font-size: 16px;
+  padding: 8px;
+  border: 1px solid rgba(109, 93, 93, 0.4);
+  border-radius: 4px;
+  font-family: 'Nunito', sans-serif;
+}
+
+button {
+  display: block;
+  margin: 20px auto;
+  width: 100%;
+  height: 36px;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.submit {
+  text-transform: uppercase;
+  font-weight: 600;
+  background: -webkit-linear-gradient(left, #7579ff, #b224ef);
+}
+
+.submit:hover {
+  background: -webkit-linear-gradient(left, #b224ef, #7579ff);
+}
+
+.forgot-pass {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0c0101;
+  cursor: pointer;
+}
+
+.forgot-pass:hover {
+  color: red;
+}
+
+/* Styling for signin and signup containers */
+.form-container {
+  position: fixed;
+  width: 400px;
+  max-width: 100%;
+  background: #fff;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+  border-radius: 10px;
+  padding: 40px;
+}
+
+.social-media {
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.social-media ul {
+  list-style: none;
+}
+
+.social-media ul li {
+  display: inline-block;
+  cursor: pointer;
+  margin: 25px 15px;
+}
+
+.social-media img {
+  width: 40px;
+  height: 40px;
+}
+
+/* Separate styles for the signin form */
+.signin-form {
+  padding: 20px;
+  transform: translateX(200px)
+}
+
+.signin-form .forgot-pass {
+  margin-top: 10px;
+}
+
+.signin-form .signup-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #505f75;
+}
+
+.signin-form .signup-link a {
+  color: #7579ff;
+  text-decoration: none;
+}
+
+.signin-form .signup-link a:hover {
+  text-decoration: underline;
+}
+
+/* Separate styles for the signup form */
+.signup-form {
+  margin: 0 auto; /* Center the form horizontally */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.signup-form .forgot-pass {
+  margin-top: 10px;
+}
+
+.signup-form .signin-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #505f75;
+}
+
+.signup-form .signin-link a {
+  color: #7579ff;
+  text-decoration: none;
+}
+
+.signup-form .signin-link a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive design for smaller devices */
+@media (max-width: 768px) {
+  .form-container {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .social-media img {
+    width: 30px;
+    height: 30px;
+  }
+}

@@ -1,0 +1,21 @@
+<!-- event_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}Event Details{% endblock title %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="text-primary text-center mb-4">{{ event.title }}</h2>
+    
+    <div class="card shadow-sm mb-4">
+        <img src="https://source.unsplash.com/1600x900/?{{ event.title }},{{ event.tag }}" class="card-img-top" alt="{{ event.title }}">
+    </div>
+    
+    <div class="card-body">
+        <p><strong>Date:</strong> {{ event.eventday }}, {{ event.eventmonth }} {{ event.eventdate }}, {{ event.eventyear }}</p>
+        <p><strong>Location:</strong> {{ event.location }}</p>
+        <p><strong>Organizer:</strong> {{ event.organizer }}</p>
+        <p><strong>About:</strong> {{ event.desc }}</p>
+    </div>
+</div>
+{% endblock body %}

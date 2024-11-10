@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %} Participate {% endblock title %}
+
+{% block nav2link %} 
+
+  {% if user.is_authenticated %}
+    /  
+  {% else %}
+    /login
+  {% endif %}
+
+{% endblock nav2link %}
+
+{% block nav2 %} 
+
+  {% if user.is_authenticated %}
+    Hello, {{user.first_name}}
+  {% else %}
+    Login
+  {% endif %}
+
+{% endblock nav2 %}
+
+{% block nav3link %} 
+
+  {% if user.is_authenticated %}
+    /
+  {% else %}
+    /
+  {% endif %}
+
+{% endblock nav3link %}
+
+{% block nav3 %} 
+
+  {% if user.is_authenticated %}
+    Home
+  {% else %}
+    Home
+  {% endif %}
+
+{% endblock nav3 %}
+
+{% block nav4link %} 
+
+  {% if user.is_authenticated %}
+    /logout 
+  {% endif %}
+
+{% endblock nav4link %}
+
+{% block nav4 %} 
+
+  {% if user.is_authenticated %}
+    LogOut
+  {% endif %}
+
+{% endblock nav4 %}
+
+{% block body %} 
+
+<div class="container-fluid px-0">
+<img src="/static/img/contact.jpg" class="d-block w-100" alt="...">
+</div>
+
+{% if user.is_authenticated %}
+  <div class="container-fluid" style="background-image:url('../static/img/bg.jpg');background-size:cover;">
+  <div class = "container pb-5 text-center" >
+  <h1 class="text-center pt-5" style="font-family:algerian;color:red;font-weight:bold;"> Ready to Participate? </h1>
+  <h1 class="text-center pb-5" style="font-family:oswald;color:red;font-weight:bold;"> Make sure you have copied the UniqueId.<br> If not, copy it before filling the form. </h1>
+  <button class="btn btn-warning my-3 mb-5" style="border-radius:32px;width:250px;height:50px;">Back to Events Page</button>
+  <form method="post" action="/contact" style="border:0px solid darkblue !important;margin-left: auto;margin-right:auto;background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0, 0.2); /* Black w/opacity/see-through */
+  border: 1px solid black;">
+  {% csrf_token %}
+  <div class="form-group">
+    <label for="name"><h3 style="font-family:roboto;padding-top:20px;color:white;">Name</h3></label>
+    <input type="text" class="form-control" style="color:white;width:300px;margin-left:auto;margin-right:auto;border: none;
+  border-bottom: 2px solid red;background-color: rgba(0,0,0, 0);" id="name" name="name">
+  </div>
+  <div class="form-group">
+    <label for="email"><h3 style="font-family:roboto;color:white;">Email address</h3></label>
+    <input type="email" class="form-control" style="color:white;width:300px;margin-left:auto;margin-right:auto;border: none;
+  border-bottom: 2px solid red;background-color: rgba(0,0,0, 0);" id="email" name="email">
+  </div>
+  <div class="form-group">
+    <label for="phone"><h3 style="font-family:roboto;color:white;">Phone Number</h3></label>
+    <input type="phone" class="form-control" id="phone" style="color:white;width:300px;margin-left:auto;margin-right:auto;border: none;
+  border-bottom: 2px solid red;background-color: rgba(0,0,0, 0);"  name="phone">
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1"><h3 style="font-family:roboto;color:white;padding-top:20px;"> Enter the Unique Id of the event you are interested in</h3></label>
+    <textarea class="form-control" id="textbox" style="color:white;width:500px;height:50px;margin-left:auto;margin-right:auto;border: none;
+  border-bottom: 2px solid red;background-color: rgba(0,0,0, 0);"  name="textbox" rows="3"></textarea>
+  </div>
+  <div class="text-center">
+  <script src='https://www.google.com/recaptcha/api.js'></script>
+  <div class="g-recaptcha" style="display:inline-block;" data-sitekey="6LeHq6kZAAAAALWyvLVXhLy5BFdz_k-Tc9b8Ri83"></div>
+  </div>
+  <button class="btn btn-danger my-3 mb-5" style="border-radius:32px;width:150px;height:50px;">Submit</button>
+  </form>
+  </div>
+  </div>
+
+{% else %}
+
+  <h1 class="text-center pt-5" style="font-family:algerian;color:darkblue;font-weight:bold;"> Ready to Participate? </h1>
+  <h1 class="text-center pt-3 pb-3" style="font-family:oswald;color:darkblue;font-weight:bold;"> Login to your account or Sign Up for free to start participating </h1>
+  <h1 class="text-center pb-5" style="font-family:oswald;color:darkblue;font-weight:bold;"> Make sure you have copied the UniqueId.<br> If not, copy it before filling the form. </h1>
+
+{% endif %}
+{% endblock body %}
