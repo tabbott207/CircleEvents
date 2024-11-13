@@ -6,7 +6,8 @@ from django.contrib.auth import authenticate
 from home.models import EventPage
 from django.core.mail import send_mail
 import requests
-from EventsForU import settings
+from django.shortcuts import render, get_object_or_404  
+from Circle import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
@@ -96,6 +97,10 @@ def contact(request):
 def eventpage(request,id):
         events = EventPage.objects.filter(id=id).first()
         return render(request, 'eventpage.html',{'events': events})
+
+def event_detail(request, id):
+    event = get_object_or_404(EventPage, id=id)
+    return render(request, 'event_detail.html', {'event': event})
 
 def logout(request):
     auth.logout(request)

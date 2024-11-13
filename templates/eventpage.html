@@ -25,9 +25,9 @@
 {% block nav2 %} 
 
   {% if user.is_authenticated %}
-    <img src="https://img.icons8.com/emoji/38/000000/waving-hand-emoji.png"/> Hello, {{user.first_name}}
+   Hello, {{user.first_name}}
   {% else %}
-    <img src="https://img.icons8.com/emoji/38/000000/waving-hand-emoji.png"/> Login
+     Login
   {% endif %}
 
 {% endblock nav2 %}
@@ -63,7 +63,7 @@
 {% block nav4 %} 
 
   {% if user.is_authenticated %}
-    <img src="https://img.icons8.com/cute-clipart/38/000000/logout-rounded-left.png"/> LogOut
+     LogOut
   {% endif %}
 
 {% endblock nav4 %}

@@ -7,3 +7,4 @@ from home.models import EventPage
 admin.site.register(Contact)
 
 admin.site.register(EventPage)
+

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Login | EventsForU</title>
+	<title>Login | Circle</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="static/css/style.css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800&display=swap" rel="stylesheet">
-  <link rel="shortcut icon" href="/static/img/title_logo.png" type="image/x-icon" />.
+  <link rel="shortcut icon" href="/static/img/logo_Circle.png" type="image/x-icon" />.
 </head>
 <body>
 <div class="container">
@@ -31,7 +31,7 @@
 
       <div class="social-media">
         <ul>
-          <li><a href="{% url "social:begin" "google-oauth2" %}"><img src="static/img/google.jpg"></a></li>
+          <li><a href="{% url 'social:begin' 'google-oauth2' %}"><img src="static/img/google.jpg"></a></li>
           <li><a href="{% url 'social:begin' 'facebook' %}"><img src="static/img/facebook.png"></a></li>
           <li><a href="{% url 'social:begin' 'github' %}"><img src="static/img/github.png"></a></li>
         </ul>
@@ -43,15 +43,13 @@
       <div class="img">
         <div class="img-text m-up">
           <h2>New here?</h2>
-          <img src="/static/img/title_logo.png" style="position:absolute;left: 30px;top: 80px;">
-          <img src="/static/img/logo.png" style="position:absolute;left: 30px;top: 300px; padding-top: 2rem;">
+          <img src="/static/img/logo_Circle.png" style="position:absolute;left: -70px; top: 45px; width: 400px; height: 350px;">
           <p>Sign up and discover great amount of new opportunities!</p>
         </div>
         <div class="img-text m-in">
           <h2>One of us?</h2>
           <p>If you already have an account, just sign in. We've missed you!</p>
-          <img src="/static/img/title_logo.png" style="position:absolute;left: 30px;top: 80px;">
-          <img src="/static/img/logo.png" style="position:absolute;left: 30px;top: 300px; padding-top: 2rem;">
+          <img src="/static/img/logo_Circle.png" style="position:absolute;left: -70px; top: 45px; width: 400px; height: 350px;">
         </div>
         <div class="img-btn">
           <span class="m-up" style="color:white;">Sign Up</span>
@@ -69,6 +67,14 @@
         <label>
           <span>User Name</span>
           <input type="text" id="username" name="username">
+        </label>
+        <label>
+          <span>Major</span>
+          <input type="text" id="major" name="major">
+        </label>
+        <label>
+          <span>Concentration</span>
+          <input type="text" id="concentration" name="concentration">
         </label>
         <label>
           <span>Email</span>
