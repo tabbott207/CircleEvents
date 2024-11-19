@@ -19,7 +19,7 @@ def index(request):
     events = EventPage.objects.all()
     return render(request, 'index.html',{'events': events})
 
-def login(request):
+def signin(request):
     if request.method== 'POST':
         username = request.POST["username"]
         password = request.POST["password"]
@@ -35,28 +35,22 @@ def login(request):
                 messages.info(request,"invalid credentials")
                 return redirect('home')
     else:
-        return render(request,'login.html')
+        return render(request,'signin.html')
 
 def signup(request):
-    if request.method == 'POST':                                              #fetching the data from form
-        username = request.POST["username"]
-        firstname = request.POST["firstname"]
-        email = request.POST["email"]
-        password = request.POST["password"]
-
-        if User.objects.filter(email=email).exists():
-            messages.info(request,'Email already in use')
-            return redirect('home')
-        elif User.objects.filter(username=username).exists():
-            messages.info(request,'Username already in use')
-            return redirect('home')
-        else:
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        email = request.POST['email']
+        firstname = request.POST.get('firstname', '')
+        try:
             user = User.objects.create_user(username=username, password=password, email=email, first_name=firstname)
             user.save()
-            messages.info(request,'Successfully Registered. You can now login to your account.')
-            return redirect('home')
-    else:    
-        return render(request, "login.html")
+            messages.success(request, "Account created successfully!")
+            return redirect('signin')  # Redirect to sign-in page after successful signup
+        except:
+            messages.error(request, "Error creating account. Try again.")
+    return render(request, 'signup.html')
 
 def contact(request):
     if request.method == "POST":
