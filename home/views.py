@@ -12,6 +12,7 @@ from google.oauth2 import service_account
 from datetime import datetime
 import requests
 from django.core.paginator import Paginator
+import hashlib
 import os
 
 # Constants
@@ -37,12 +38,17 @@ def get_calendar_events():
         ).execute()
         events = events_result.get('items', [])
 
+        # Generate consistent IDs for Google events
         return [
             {
+                'id': generate_event_id({
+                    'title': event.get('summary', 'No Title'),
+                    'start_time': event['start'].get('dateTime', event['start'].get('date')),
+                }),
                 'title': event.get('summary', 'No Title'),
                 'start_time': event['start'].get('dateTime', event['start'].get('date')),
                 'location': event.get('location', 'TBA'),
-                'id': event.get('id'),
+                'google_url': event.get('htmlLink', '#'),  # Add link for Google events
             }
             for event in events
         ]
@@ -50,6 +56,7 @@ def get_calendar_events():
         print(f"Error fetching calendar events: {e}")
         return []
 
+    
 # Helper function to fetch Mindfulness events from Localist API
 def get_mindfulness_events():
     LOCALIST_API_URL = "https://campusevents.charlotte.edu/api/2/events?group_id=Health%20and%20Wellbeing"
@@ -57,28 +64,39 @@ def get_mindfulness_events():
         response = requests.get(LOCALIST_API_URL)
         if response.status_code == 200:
             data = response.json()
+            events = []
 
-            return [
-                {
-                    'title': event['event'].get('title', 'No Title'),
-                    'start_time': event['event']['event_instances'][0]['event_instance'].get('start', 'TBD'),
-                    'location': event['event'].get('location_name', 'TBA'),
-                    'photo_url': event['event'].get('photo_url', None),
-                    'localist_url': event['event'].get('localist_url', '#'),
+            for event_data in data.get('events', []):
+                event = {
+                    'title': event_data['event'].get('title', 'No Title'),
+                    'start_time': event_data['event']['event_instances'][0]['event_instance'].get('start', 'TBD'),
+                    'location': event_data['event'].get('location_name', 'TBA'),
+                    'photo_url': event_data['event'].get('photo_url', None),
+                    'localist_url': event_data['event'].get('localist_url', '#'),
                 }
-                for event in data.get('events', [])
-            ]
+                # Generate unique IDs for Localist events
+                event['id'] = generate_event_id(event)
+                events.append(event)
+            return events
     except Exception as e:
         print(f"Error fetching Mindfulness events: {e}")
     return []
 
 
 
+
+
+
+# View: Home page with events
 # View: Home page with events
 def index(request):
     # Fetch events from both sources
     career_events = get_calendar_events()
     mindfulness_events = get_mindfulness_events()
+
+    # Apply generated IDs
+    for event in career_events + mindfulness_events:
+        event['id'] = generate_event_id(event)
 
     # Combine and sort events by start time
     all_events = career_events + mindfulness_events
@@ -94,6 +112,7 @@ def index(request):
         'mindfulness_events': mindfulness_events,  # Still passed for the mindfulness tab
         'career_events': career_events,  # Still passed for the career tab
     })
+
 
 
 # View: User Sign-In
@@ -180,13 +199,40 @@ def eventpage(request, id):
     event = get_object_or_404(EventPage, id=id)
     return render(request, 'eventpage.html', {'event': event})
 
-# View: Event Details
-def event_detail(request, id):
-    event = get_object_or_404(EventPage, id=id)
+def event_detail(request, event_id):
+    # Fetch Google Calendar and Localist events
+    google_events = get_calendar_events()
+    localist_events = get_mindfulness_events()
+
+    # Search for the event by ID in both sources
+    google_event = next((e for e in google_events if e['id'] == event_id), None)
+    localist_event = next((e for e in localist_events if e['id'] == event_id), None)
+
+    # Find the event or return a 404 page
+    event = google_event or localist_event
+    if not event:
+        return render(request, '404.html', status=404)
+
+    # Ensure a `localist_url` or `google_url` exists in the event context
+    if google_event:
+        event['localist_url'] = event.get('google_url', '#')
+    elif localist_event:
+        event['google_url'] = event.get('localist_url', '#')
+
+    # Render the event detail page
     return render(request, 'event_detail.html', {'event': event})
+
+
 
 # View: Logout
 def logout(request):
     auth.logout(request)
     messages.success(request, "Logged out successfully.")
     return redirect('/')
+def generate_event_id(event):
+    # Generate a unique hash using title and start time
+    unique_str = f"{event.get('title', 'unknown')}-{event.get('start_time', 'unknown')}"
+    return hashlib.md5(unique_str.encode()).hexdigest()
+
+
+

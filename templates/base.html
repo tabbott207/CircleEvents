@@ -24,8 +24,10 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="d-flex align-items-center w-100">
-      <!-- Logo -->
-      <img src="/static/img/logo_Circle.png" alt="Logo" style="max-height: 100px; width: auto; margin-right: 1rem;">
+      <!-- Logo wrapped in a link -->
+      <a href="{% url 'home' %}">
+        <img src="/static/img/logo_Circle.png" alt="Logo" style="max-height: 100px; width: auto; margin-right: 1rem;">
+      </a>
       <!-- Navbar Links -->
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
