@@ -93,17 +93,13 @@ def index(request):
     career_events = get_calendar_events()
     mindfulness_events = get_mindfulness_events()
 
+    # Apply generated IDs
+    for event in career_events + mindfulness_events:
+        event['id'] = generate_event_id(event)
+
     # Combine and sort events by start time
     all_events = career_events + mindfulness_events
     all_events.sort(key=lambda e: e['start_time'])  # Sort events chronologically
-
-    # Search functionality
-    query = request.GET.get('q', '')
-    if query:
-        all_events = [
-            event for event in all_events
-            if query.lower() in event['title'].lower() or query.lower() in event.get('location', '').lower()
-        ]
 
     # Implement pagination
     paginator = Paginator(all_events, 6)  # Show 6 events per page
@@ -114,7 +110,6 @@ def index(request):
         'page_obj': page_obj,  # Paginated events
         'mindfulness_events': mindfulness_events,  # Still passed for the mindfulness tab
         'career_events': career_events,  # Still passed for the career tab
-        'query': query,  # Pass the query back to the template for display
     })
 
 # View: User Sign-In
@@ -123,50 +118,32 @@ def signin(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
+        user = authenticate(username=username, password=password)
+        if user:
+            auth.login(request, user)
             messages.success(request, "Successfully logged in!")
-            return redirect('home')  # Adjust 'home' to the actual homepage name
+            return redirect('index')
         else:
-            messages.error(request, "Invalid username or password.")
+            messages.error(request, "Invalid credentials.")
             return redirect('signin')
-
-    return render(request, 'registration/login.html')
+    return render(request, 'signin.html')
 
 # View: User Sign-Up
 def signup(request):
     if request.method == 'POST':
         username = request.POST.get('username')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
+        password = request.POST.get('password')
         email = request.POST.get('email')
         firstname = request.POST.get('firstname', '')
-        major = request.POST.get('major', '')
-        concentration = request.POST.get('concentration', '')
-
-        if password1 != password2:
-            messages.error(request, "Passwords do not match!")
-            return redirect('signup')
 
         try:
-            user = User.objects.create_user(
-                username=username,
-                password=password1,
-                email=email,
-                first_name=firstname,
-            )
-            user.profile.major = major  # Assuming a profile model for additional fields
-            user.profile.concentration = concentration
-            user.profile.save()
+            user = User.objects.create_user(username=username, password=password, email=email, first_name=firstname)
+            user.save()
             messages.success(request, "Account created successfully!")
             return redirect('signin')
         except Exception as e:
             messages.error(request, f"Error creating account: {e}")
-            return redirect('signup')
-
-    return render(request, 'registration/login_and_signup.html')
+    return render(request, 'signup.html')
 
 # View: Contact Form
 def contact(request):

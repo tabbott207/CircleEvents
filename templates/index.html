@@ -150,7 +150,7 @@
               <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="true">All Events</a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" id="mindfulness-tab" data-toggle="tab" href="#mindfulness" role="tab" aria-controls="mindfulness" aria-selected="false">Mindfulness Events</a>
+              <a class="nav-link" id="mindfulness-tab" data-toggle="tab" href="#mindfulness" role="tab" aria-controls="mindfulness" aria-selected="false">Mindfulness & Social Events</a>
           </li>
           <li class="nav-item">
               <a class="nav-link" id="career-tab" data-toggle="tab" href="#career" role="tab" aria-controls="career" aria-selected="false">Career Events</a>
@@ -266,26 +266,26 @@
 
               <!-- Pagination Controls -->
               <div class="d-flex justify-content-center mt-4">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        {% if page_obj.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                                    &laquo; Previous
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% if page_obj.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                                    Next &raquo;
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            </div>
-        </div>
+                  <nav aria-label="Page navigation">
+                      <ul class="pagination">
+                          {% if page_obj.has_previous %}
+                              <li class="page-item">
+                                  <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                      &laquo; Previous
+                                  </a>
+                              </li>
+                          {% endif %}
+                          {% if page_obj.has_next %}
+                              <li class="page-item">
+                                  <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                      Next &raquo;
+                                  </a>
+                              </li>
+                          {% endif %}
+                      </ul>
+                  </nav>
+              </div>
+          </div>
       </div>
   </div>
 </div>
