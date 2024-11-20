@@ -123,32 +123,44 @@ def signin(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        user = authenticate(username=username, password=password)
-        if user:
-            auth.login(request, user)
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
             messages.success(request, "Successfully logged in!")
-            return redirect('index')
+            return redirect('home')  # Adjust 'home' to the actual homepage name
         else:
-            messages.error(request, "Invalid credentials.")
+            messages.error(request, "Invalid username or password.")
             return redirect('signin')
-    return render(request, 'signin.html')
+
+    return render(request, 'registration/login.html')
 
 # View: User Sign-Up
 def signup(request):
     if request.method == 'POST':
         username = request.POST.get('username')
-        password = request.POST.get('password')
         email = request.POST.get('email')
-        firstname = request.POST.get('firstname', '')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
 
-        try:
-            user = User.objects.create_user(username=username, password=password, email=email, first_name=firstname)
-            user.save()
-            messages.success(request, "Account created successfully!")
-            return redirect('signin')
-        except Exception as e:
-            messages.error(request, f"Error creating account: {e}")
-    return render(request, 'signup.html')
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect('signup')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists.")
+            return redirect('signup')
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Email already exists.")
+            return redirect('signup')
+
+        user = User.objects.create_user(username=username, email=email, password=password)
+        user.save()
+        messages.success(request, "Account created successfully. Please log in.")
+        return redirect('signin')
+
+    return render(request, 'registration/register.html')
 
 # View: Contact Form
 def contact(request):
