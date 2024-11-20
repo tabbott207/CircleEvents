@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <link rel="stylesheet" href="/static/css/style.css"> <!-- Ensure this path points to your CSS -->
+  <style>
+    /* Inline additional spacing for profile elements */
+    .profile-field {
+      margin-bottom: 20px; /* Adds spacing between fields */
+    }
+    .profile-form label span {
+      display: inline-block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .profile-form input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid rgba(109, 93, 93, 0.4);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Profile Page Wrapper -->
+  <div class="form-container">
+    <h2>Welcome, {{ user.first_name }}!</h2>
+    <form method="POST" action="{% url 'profile' %}" class="profile-form">
+      {% csrf_token %}
+      <!-- Username Field -->
+      <div class="profile-field">
+        <label>
+          <span>Username:</span>
+          <input type="text" name="username" value="{{ user.username }}" required>
+        </label>
+      </div>
+
+      <!-- Email Field -->
+      <div class="profile-field">
+        <label>
+          <span>Email:</span>
+          <input type="email" name="email" value="{{ user.email }}" required>
+        </label>
+      </div>
+
+      <!-- Major Field -->
+      <div class="profile-field">
+        <label>
+          <span>Major:</span>
+          <p>{{ user.profile.major|default:"CCI" }}</p> <!-- Display-only field -->
+        </label>
+      </div>
+
+      <!-- Concentration Field -->
+      <div class="profile-field">
+        <label>
+          <span>Concentration:</span>
+          <input type="text" name="concentration" value="{{ user.profile.concentration|default:'' }}" placeholder="Enter your concentration">
+        </label>
+      </div>
+
+      <button class="submit" type="submit">Update Profile</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In | Circle</title>
-     {% load static %}
+    {% load static %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 <body>
-<div class="container">
-    <div class="form sign-in">
+    <div class="form-container"> <!-- Use the form-container for consistent styling -->
         <h2>Sign In</h2>
-        <form method="POST" action="login">
+        <form method="POST" action="{% url 'signin' %}">
             {% csrf_token %}
             <label>
                 <span>Username</span>
-                <input type="text" name="username">
+                <input type="text" name="username" placeholder="Enter your username" required>
             </label>
             <label>
                 <span>Password</span>
-                <input type="password" name="password">
+                <input type="password" name="password" placeholder="Enter your password" required>
             </label>
-            <button class="submit btn btn-primary" type="submit">Sign In</button>
+            <button class="submit" type="submit">Sign In</button>
         </form>
-        <p class="forgot-pass">Forgot Password?</p>
+        <!-- <p class="forgot-pass">Forgot Password?</p> -->
         <p>Don't have an account?</p>
-        <a href="{% url 'signup' %}" class="btn btn-secondary">Sign Up</a>
+        <a href="{% url 'signup' %}" class="btn-submit-link">Sign up</a>
     </div>
-</div>
 </body>
 </html>
