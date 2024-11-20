@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up | Circle</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <div class="form sign-up">
+        <h2>Sign Up</h2>
+        <form method="POST" action="signup">
+            {% csrf_token %}
+            <label>
+                <span>First Name</span>
+                <input type="text" name="firstname">
+            </label>
+            <label>
+                <span>Username</span>
+                <input type="text" name="username">
+            </label>
+            <label>
+                <span>Email</span>
+                <input type="email" name="email">
+            </label>
+            <label>
+                <span>Password</span>
+                <input type="password" name="password">
+            </label>
+            <button class="submit btn btn-primary" type="submit">Sign Up</button>
+        </form>
+        <p>Already have an account?</p>
+        <a href="{% url 'signin' %}" class="btn btn-secondary">Sign In</a>
+    </div>
+</div>
+</body>
+</html>
