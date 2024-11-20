@@ -38,7 +38,7 @@ def get_calendar_events():
         ).execute()
         events = events_result.get('items', [])
 
-        # Generate consistent IDs for Google events
+        # Generate consistent IDs and return event details
         return [
             {
                 'id': generate_event_id({
@@ -49,6 +49,7 @@ def get_calendar_events():
                 'start_time': event['start'].get('dateTime', event['start'].get('date')),
                 'location': event.get('location', 'TBA'),
                 'google_url': event.get('htmlLink', '#'),  # Add link for Google events
+                'description': event.get('description', 'Description not available.')
             }
             for event in events
         ]
@@ -67,25 +68,22 @@ def get_mindfulness_events():
             events = []
 
             for event_data in data.get('events', []):
+                # Extract event details
                 event = {
                     'title': event_data['event'].get('title', 'No Title'),
                     'start_time': event_data['event']['event_instances'][0]['event_instance'].get('start', 'TBD'),
                     'location': event_data['event'].get('location_name', 'TBA'),
                     'photo_url': event_data['event'].get('photo_url', None),
                     'localist_url': event_data['event'].get('localist_url', '#'),
+                    'description': event_data['event'].get('description_text', 'Description not available.'),
                 }
-                # Generate unique IDs for Localist events
+                # Generate unique IDs using the generate_event_id function
                 event['id'] = generate_event_id(event)
                 events.append(event)
             return events
     except Exception as e:
         print(f"Error fetching Mindfulness events: {e}")
     return []
-
-
-
-
-
 
 # View: Home page with events
 # View: Home page with events
@@ -112,8 +110,6 @@ def index(request):
         'mindfulness_events': mindfulness_events,  # Still passed for the mindfulness tab
         'career_events': career_events,  # Still passed for the career tab
     })
-
-
 
 # View: User Sign-In
 def signin(request):
@@ -222,8 +218,6 @@ def event_detail(request, event_id):
     # Render the event detail page
     return render(request, 'event_detail.html', {'event': event})
 
-
-
 # View: Logout
 def logout(request):
     auth.logout(request)
@@ -233,6 +227,3 @@ def generate_event_id(event):
     # Generate a unique hash using title and start time
     unique_str = f"{event.get('title', 'unknown')}-{event.get('start_time', 'unknown')}"
     return hashlib.md5(unique_str.encode()).hexdigest()
-
-
-
