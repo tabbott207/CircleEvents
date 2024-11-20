@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from home.models import Contact, EventPage
 from django.contrib import messages
+from django.db.models import Q
 from django.contrib.auth.models import User, auth
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
@@ -92,13 +93,17 @@ def index(request):
     career_events = get_calendar_events()
     mindfulness_events = get_mindfulness_events()
 
-    # Apply generated IDs
-    for event in career_events + mindfulness_events:
-        event['id'] = generate_event_id(event)
-
     # Combine and sort events by start time
     all_events = career_events + mindfulness_events
     all_events.sort(key=lambda e: e['start_time'])  # Sort events chronologically
+
+    # Search functionality
+    query = request.GET.get('q', '')
+    if query:
+        all_events = [
+            event for event in all_events
+            if query.lower() in event['title'].lower() or query.lower() in event.get('location', '').lower()
+        ]
 
     # Implement pagination
     paginator = Paginator(all_events, 6)  # Show 6 events per page
@@ -109,6 +114,7 @@ def index(request):
         'page_obj': page_obj,  # Paginated events
         'mindfulness_events': mindfulness_events,  # Still passed for the mindfulness tab
         'career_events': career_events,  # Still passed for the career tab
+        'query': query,  # Pass the query back to the template for display
     })
 
 # View: User Sign-In
