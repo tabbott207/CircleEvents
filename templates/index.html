@@ -15,21 +15,19 @@
 {% block nav2link %} 
 
   {% if user.is_authenticated %}
-    
+    /profile
   {% else %}
     /signup
   {% endif %}
 
 {% endblock nav2link %}
 
-{% block nav2 %} 
-
+{% block nav2 %}
   {% if user.is_authenticated %}
-   Hello, {{user.first_name}}
+    Hello, {{ user.first_name }}
   {% else %}
-   Login
+    Login
   {% endif %}
-
 {% endblock nav2 %}
 
 {% block nav3link %} 

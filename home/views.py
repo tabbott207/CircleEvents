@@ -3,16 +3,18 @@ from home.models import Contact, EventPage
 from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.models import User, auth
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
+from .models import Profile
 from datetime import datetime
 import requests
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 import hashlib
 import os
 
@@ -121,8 +123,19 @@ def signin(request):
         user = authenticate(username=username, password=password)
         if user:
             auth.login(request, user)
+            try:
+                # Check if the user's profile has a concentration
+                profile = Profile.objects.get(user=user)
+                if not profile.concentration:  # Redirect if concentration is not set
+                    messages.warning(request, "Please update your concentration.")
+                    return redirect('profile')  # Redirect to the profile page
+            except Profile.DoesNotExist:
+                # Handle case where profile is missing
+                messages.error(request, "Profile not found. Contact support.")
+                return redirect('signin')
+
             messages.success(request, "Successfully logged in!")
-            return redirect('index')
+            return redirect('home')  # Redirect to home if concentration exists
         else:
             messages.error(request, "Invalid credentials.")
             return redirect('signin')
@@ -136,11 +149,29 @@ def signup(request):
         email = request.POST.get('email')
         firstname = request.POST.get('firstname', '')
 
+        # Check if username or email already exists
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username is already taken.")
+            return redirect('signup')
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Email is already registered.")
+            return redirect('signup')
+
         try:
+            # Create the user
             user = User.objects.create_user(username=username, password=password, email=email, first_name=firstname)
             user.save()
-            messages.success(request, "Account created successfully!")
-            return redirect('signin')
+
+            # Create an empty profile
+            Profile.objects.create(user=user)
+
+            # Authenticate and log the user in
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
+                messages.success(request, "Account created successfully! Please update your profile.")
+                return redirect('profile')  # Redirect to profile page
+
         except Exception as e:
             messages.error(request, f"Error creating account: {e}")
     return render(request, 'signup.html')
@@ -228,3 +259,27 @@ def generate_event_id(event):
     # Generate a unique hash using title and start time
     unique_str = f"{event.get('title', 'unknown')}-{event.get('start_time', 'unknown')}"
     return hashlib.md5(unique_str.encode()).hexdigest()
+  
+  
+# View: User Profile
+@login_required
+def profile(request):
+    user = request.user
+
+    if request.method == 'POST':
+        # Update User fields
+        user.username = request.POST.get('username', user.username)
+        user.email = request.POST.get('email', user.email)
+        user.save()
+
+        # Update or create Profile fields
+        profile, created = Profile.objects.get_or_create(user=user)
+        profile.major = request.POST.get('major', profile.major)
+        profile.concentration = request.POST.get('concentration', profile.concentration)
+        profile.save()
+
+        messages.success(request, "Profile updated successfully!")
+        return redirect('home')  # Redirect to the home page after updating
+
+    # Render the profile form with the current user data
+    return render(request, 'profile.html', {'user': user})
