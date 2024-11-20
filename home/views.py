@@ -139,28 +139,34 @@ def signin(request):
 def signup(request):
     if request.method == 'POST':
         username = request.POST.get('username')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
         email = request.POST.get('email')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
+        firstname = request.POST.get('firstname', '')
+        major = request.POST.get('major', '')
+        concentration = request.POST.get('concentration', '')
 
-        if password != confirm_password:
-            messages.error(request, "Passwords do not match.")
+        if password1 != password2:
+            messages.error(request, "Passwords do not match!")
             return redirect('signup')
 
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already exists.")
+        try:
+            user = User.objects.create_user(
+                username=username,
+                password=password1,
+                email=email,
+                first_name=firstname,
+            )
+            user.profile.major = major  # Assuming a profile model for additional fields
+            user.profile.concentration = concentration
+            user.profile.save()
+            messages.success(request, "Account created successfully!")
+            return redirect('signin')
+        except Exception as e:
+            messages.error(request, f"Error creating account: {e}")
             return redirect('signup')
 
-        if User.objects.filter(email=email).exists():
-            messages.error(request, "Email already exists.")
-            return redirect('signup')
-
-        user = User.objects.create_user(username=username, email=email, password=password)
-        user.save()
-        messages.success(request, "Account created successfully. Please log in.")
-        return redirect('signin')
-
-    return render(request, 'registration/register.html')
+    return render(request, 'registration/login_and_signup.html')
 
 # View: Contact Form
 def contact(request):
