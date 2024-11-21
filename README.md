@@ -21,4 +21,8 @@
 ### 5. Final Step
 > go to the directory where manage.py is located and run the following command
 >
->> python manage.py runserver
+>python manage.py runserver
+>>if you get a google api error, run this command and try again: 
+>
+>>python -m pip install --upgrade google-api-python-client
+
