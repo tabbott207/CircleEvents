@@ -1,8 +1,6 @@
 .DS_Store
 .DS_Store
-env/pyvenv.cfg
-env/Scripts/activate
-env/Scripts/activate.bat
-env/Scripts/Activate.ps1
-env/Scripts/python.exe
-env/Scripts/pythonw.exe
+/env
+/Circle/__pycache__
+/home/__pycache__
+/home/migrations/__pycache__
