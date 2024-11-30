@@ -10,4 +10,8 @@
 >>>>>>> 05631b10 (Revert "gitignore")
 =======
 /env
+<<<<<<< HEAD
 >>>>>>> 087081e1 (Update .gitignore)
+=======
+/.idea
+>>>>>>> a5b5bef1 (Update .gitignore)
