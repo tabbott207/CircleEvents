@@ -5,5 +5,9 @@
 /Circle/__pycache__
 /home/__pycache__
 /home/migrations/__pycache__
+<<<<<<< HEAD
 =======
 >>>>>>> 05631b10 (Revert "gitignore")
+=======
+/env
+>>>>>>> 087081e1 (Update .gitignore)
