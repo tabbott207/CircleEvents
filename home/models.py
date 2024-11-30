@@ -37,6 +37,12 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # Links to the User model
     major = models.CharField(max_length=100, default="CCI", editable=False)  # Default value, non-editable
     concentration = models.CharField(max_length=100, blank=True, null=True)
+    followers = models.ManyToManyField(
+        'self',  # Refers to the same Profile model
+        symmetrical=False,  # Following is not necessarily reciprocal
+        related_name='following',  # Reverse relation for "following"
+        blank=True  # Optional field
+    )
 
     def __str__(self):
         return self.user.username
