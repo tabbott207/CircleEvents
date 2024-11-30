@@ -1,68 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile</title>
-  <link rel="stylesheet" href="/static/css/style.css"> <!-- Ensure this path points to your CSS -->
-  <style>
-    /* Inline additional spacing for profile elements */
-    .profile-field {
-      margin-bottom: 20px; /* Adds spacing between fields */
-    }
-    .profile-form label span {
-      display: inline-block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-    .profile-form input {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid rgba(109, 93, 93, 0.4);
-      border-radius: 4px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="/static/css/style.css"> <!-- Ensure this path points to your CSS -->
+    <style>
+        /* Inline additional spacing for profile elements */
+        .profile-field {
+            margin-bottom: 20px; /* Adds spacing between fields */
+        }
+
+        .profile-form label span {
+            display: inline-block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .profile-form input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid rgba(109, 93, 93, 0.4);
+            border-radius: 4px;
+        }
+
+        .profile-social {
+            margin-top: 30px;
+        }
+
+        .profile-social h3 {
+            margin-bottom: 10px;
+        }
+
+        .profile-social ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .profile-social ul li {
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
-  <!-- Profile Page Wrapper -->
-  <div class="form-container">
+<!-- Profile Page Wrapper -->
+<div class="form-container">
     <h2>Welcome, {{ user.first_name }}!</h2>
+    <div class="profile-social">
+        <h3>Followers</h3>
+        <ul>
+            {% for follower in followers %}
+                <li>{{ follower.user.username }}</li>
+            {% empty %}
+                <li>No followers yet.</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Updated Suggestions Section -->
+        {% if not followers %}
+            <h3>Suggestions</h3>
+            <ul>
+                {% for suggestion in suggestions %}
+                    <li>
+                        <form method="POST" action="{% url 'follow_user' suggestion.user.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" style="background:none; border:none; color:blue; text-decoration:underline; cursor:pointer;">
+                                {{ suggestion.user.username }} (Major: {{ suggestion.major }})
+                            </button>
+                        </form>
+                    </li>
+                {% empty %}
+                    <li>No suggestions available.</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    <!-- Updated Following Section -->
+    <h3>Following</h3>
+    <ul>
+        {% for follow in following %}
+            <li>
+                <form method="POST" action="{% url 'unfollow_user' follow.user.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="background:none; border:none; color:blue; text-decoration:underline; cursor:pointer;">
+                        {{ follow.user.username }}
+                    </button>
+                </form>
+            </li>
+        {% empty %}
+            <li>Not following anyone yet.</li>
+        {% endfor %}
+    </ul>
+    </div>
+
     <form method="POST" action="{% url 'profile' %}" class="profile-form">
-      {% csrf_token %}
-      <!-- Username Field -->
-      <div class="profile-field">
-        <label>
-          <span>Username:</span>
-          <input type="text" name="username" value="{{ user.username }}" required>
-        </label>
-      </div>
+        {% csrf_token %}
+        <!-- Username Field -->
+        <div class="profile-field">
+            <label>
+                <span>Username:</span>
+                <input type="text" name="username" value="{{ user.username }}" required>
+            </label>
+        </div>
 
-      <!-- Email Field -->
-      <div class="profile-field">
-        <label>
-          <span>Email:</span>
-          <input type="email" name="email" value="{{ user.email }}" required>
-        </label>
-      </div>
+        <!-- Email Field -->
+        <div class="profile-field">
+            <label>
+                <span>Email:</span>
+                <input type="email" name="email" value="{{ user.email }}" required>
+            </label>
+        </div>
 
-      <!-- Major Field -->
-      <div class="profile-field">
-        <label>
-          <span>Major:</span>
-          <p>{{ user.profile.major|default:"CCI" }}</p> <!-- Display-only field -->
-        </label>
-      </div>
+        <!-- Major Field -->
+        <div class="profile-field">
+            <label>
+                <span>Major:</span>
+                <p>{{ user.profile.major|default:"CCI" }}</p>
+            </label>
+        </div>
 
-      <!-- Concentration Field -->
-      <div class="profile-field">
-        <label>
-          <span>Concentration:</span>
-          <input type="text" name="concentration" value="{{ user.profile.concentration|default:'' }}" placeholder="Enter your concentration">
-        </label>
-      </div>
+        <!-- Concentration Field -->
+        <div class="profile-field">
+            <label>
+                <span>Concentration:</span>
+                <input type="text" name="concentration" value="{{ user.profile.concentration|default:'' }}"
+                       placeholder="Enter your concentration">
+            </label>
+        </div>
 
-      <button class="submit" type="submit">Update Profile</button>
+        <button class="submit" type="submit">Update Profile</button>
     </form>
-  </div>
+
+    <!-- Follow/Unfollow Buttons -->
+    <div class="profile-actions">
+        {% if user in user.profile.followers.all %}
+            <form method="POST" action="{% url 'unfollow_user' user.id %}">
+                {% csrf_token %}
+                <button type="submit">Unfollow</button>
+            </form>
+        {% else %}
+            <form method="POST" action="{% url 'follow_user' user.id %}">
+                {% csrf_token %}
+                <button type="submit">Follow</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
 </body>
 </html>

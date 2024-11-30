@@ -265,6 +265,13 @@ def generate_event_id(event):
 @login_required
 def profile(request):
     user = request.user
+    profile, created = Profile.objects.get_or_create(user=user)
+    followers = profile.followers.all()
+
+    # Suggest people with the same major if no followers
+    suggestions = None
+    if not followers.exists():
+        suggestions = Profile.objects.filter(major=profile.major).exclude(user=user)
 
     if request.method == 'POST':
         # Update User fields
@@ -272,14 +279,46 @@ def profile(request):
         user.email = request.POST.get('email', user.email)
         user.save()
 
-        # Update or create Profile fields
-        profile, created = Profile.objects.get_or_create(user=user)
+        # Update Profile fields
         profile.major = request.POST.get('major', profile.major)
         profile.concentration = request.POST.get('concentration', profile.concentration)
         profile.save()
 
         messages.success(request, "Profile updated successfully!")
-        return redirect('home')  # Redirect to the home page after updating
+        return redirect('profile')  # Redirect back to the profile page
 
-    # Render the profile form with the current user data
-    return render(request, 'profile.html', {'user': user})
+    # Get following for template
+    following = profile.following.all()
+
+    return render(request, 'profile.html', {
+        'user': user,
+        'followers': followers,
+        'following': following,
+        'suggestions': suggestions,
+    })
+
+@login_required
+def follow_user(request, user_id):
+    target_user = get_object_or_404(User, id=user_id)
+    target_profile, created = Profile.objects.get_or_create(user=target_user)
+
+    if target_profile not in request.user.profile.following.all():
+        request.user.profile.following.add(target_profile)
+        messages.success(request, f"You are now following {target_user.username}!")
+    else:
+        messages.info(request, f"You are already following {target_user.username}.")
+
+    return redirect('profile')
+
+@login_required
+def unfollow_user(request, user_id):
+    target_user = get_object_or_404(User, id=user_id)
+    target_profile, created = Profile.objects.get_or_create(user=target_user)
+
+    if target_profile in request.user.profile.following.all():
+        request.user.profile.following.remove(target_profile)
+        messages.success(request, f"You have unfollowed {target_user.username}.")
+    else:
+        messages.info(request, f"You were not following {target_user.username}.")
+
+    return redirect('profile')
