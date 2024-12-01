@@ -67,33 +67,28 @@
 {% endblock nav4 %}
 
 {% block body %}
-    {% if user.is_authenticated %}
-        <div class="container my-4">
-            <h2>Recommended Events for {{ user.first_name }}</h2>
-            <div class="row">
-                {% for event in recommended_events %}
-                    <div class="col-12 col-md-4 mb-2">
-                        <div class="card p-3 h-100 shadow-sm border-0 rounded">
-                            <h5 class="card-title text-primary mb-1">{{ event.title }}</h5>
-                            <p class="text-muted mb-0">
-                                <i class="fas fa-calendar-alt"></i> {{ event.start_time }}
-                            </p>
-                            <p class="text-muted mb-1">
-                                <i class="fas fa-map-marker-alt"></i> {{ event.location }}
-                            </p>
-                            {% if event.google_url %}
-                                <a href="{{ event.google_url }}" class="btn btn-sm btn-outline-primary">More Info</a>
-                            {% elif event.localist_url %}
-                                <a href="{{ event.localist_url }}" class="btn btn-sm btn-outline-primary">More Info</a>
-                            {% else %}
-                                <p class="text-danger mb-0">No link available</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                {% endfor %}
+{% if user.is_authenticated %}
+<!-- Recommended Events Section -->
+<div class="container my-4">
+    <h2>Recommended Events for {{ user.first_name }}</h2>
+    <div class="row">
+        {% for event in recommended_events %}
+            <div class="col-12 col-md-4 mb-2">
+                <div class="card p-3 h-100 shadow-sm border-0 rounded">
+                    <h5 class="card-title text-primary mb-1">{{ event.title }}</h5>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-calendar-alt"></i> {{ event.start_time }}
+                    </p>
+                    <p class="text-muted mb-1">
+                        <i class="fas fa-map-marker-alt"></i> {{ event.location }}
+                    </p>
+                    <a href="{% url 'event_detail' event.id %}" class="btn btn-sm btn-outline-primary">More Info</a>
+                </div>
             </div>
-        </div>
-    {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
 
     <div style="background-color:lightblue;">
         <style>
