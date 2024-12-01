@@ -14,4 +14,8 @@
 >>>>>>> 087081e1 (Update .gitignore)
 =======
 /.idea
+<<<<<<< HEAD
 >>>>>>> a5b5bef1 (Update .gitignore)
+=======
+/Circle/__pycache__
+>>>>>>> cb99d85b (Update .gitignore)
