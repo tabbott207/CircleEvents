@@ -20,8 +20,8 @@ import os
 
 # Constants
 EMAIL_SENDER = settings.EMAIL_HOST_USER
-GOOGLE_CALENDAR_ID = 'cci-events@charlotte.edu'
-SERVICE_ACCOUNT_FILE = os.path.join(settings.BASE_DIR, 'home/keys', 'soy-involution-442301-f9-0ea0f05b64cf.json')
+GOOGLE_CALENDAR_ID = 'cci-events@uncc.edu'
+SERVICE_ACCOUNT_FILE = os.path.join(settings.BASE_DIR, 'home/keys', 'soy-involution-442301-f9-e9fd74c6c65c.json')
 GOOGLE_RECAPTCHA_SECRET_KEY = settings.GOOGLE_RECAPTCHA_SECRET_KEY
 LOCALIST_API_URL = "https://campusevents.charlotte.edu/api/2/events?group_id=Health%20and%20Wellbeing"
 
