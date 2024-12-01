@@ -67,6 +67,34 @@
 {% endblock nav4 %}
 
 {% block body %}
+    {% if user.is_authenticated %}
+        <div class="container my-4">
+            <h2>Recommended Events for {{ user.first_name }}</h2>
+            <div class="row">
+                {% for event in recommended_events %}
+                    <div class="col-12 col-md-4 mb-2">
+                        <div class="card p-3 h-100 shadow-sm border-0 rounded">
+                            <h5 class="card-title text-primary mb-1">{{ event.title }}</h5>
+                            <p class="text-muted mb-0">
+                                <i class="fas fa-calendar-alt"></i> {{ event.start_time }}
+                            </p>
+                            <p class="text-muted mb-1">
+                                <i class="fas fa-map-marker-alt"></i> {{ event.location }}
+                            </p>
+                            {% if event.google_url %}
+                                <a href="{{ event.google_url }}" class="btn btn-sm btn-outline-primary">More Info</a>
+                            {% elif event.localist_url %}
+                                <a href="{{ event.localist_url }}" class="btn btn-sm btn-outline-primary">More Info</a>
+                            {% else %}
+                                <p class="text-danger mb-0">No link available</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
     <div style="background-color:lightblue;">
         <style>
             .carousel-inner {
@@ -188,31 +216,31 @@
 
             <!-- Tab Content -->
             <div class="tab-content" id="eventTabContent">
-                <!-- All Events -->
-                <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
-                    <div class="row">
-                        {% for event in page_obj %}
-                            <div class="col-sm-6 col-md-4 mb-4">
-                                <div class="card h-100 shadow-sm border-0 rounded">
-                                    <img
-                                            src="{{ event.photo_url|default:'https://pbs.twimg.com/profile_images/1428371752862720009/PKKG7xm1_400x400.jpg' }}"
-                                            class="card-img-top rounded-top"
-                                            alt="{{ event.title }}">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-primary">{{ event.title }}</h5>
-                                        <p class="text-muted mb-1">
-                                            <i class="fas fa-calendar-alt"></i> {{ event.start_time }}
-                                        </p>
-                                        <p class="text-muted mb-2">
-                                            <i class="fas fa-map-marker-alt"></i> {{ event.location }}
-                                        </p>
-                                        <a href="{% url 'event_detail' event.id %}"
-                                           class="btn btn-outline-primary btn-sm">More Info</a>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
+                <!-- Main Events Section -->
+    <div class="container my-4">
+        <h2 class="text-dark mb-4">All Events</h2>
+        <div class="row">
+            {% for event in page_obj %}
+                <div class="col-sm-6 col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm border-0 rounded">
+                        <img
+                            src="{{ event.photo_url|default:'https://pbs.twimg.com/profile_images/1428371752862720009/PKKG7xm1_400x400.jpg' }}"
+                            class="card-img-top rounded-top"
+                            alt="{{ event.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">{{ event.title }}</h5>
+                            <p class="text-muted mb-1">
+                                <i class="fas fa-calendar-alt"></i> {{ event.start_time }}
+                            </p>
+                            <p class="text-muted mb-2">
+                                <i class="fas fa-map-marker-alt"></i> {{ event.location }}
+                            </p>
+                            <a href="{% url 'event_detail' event.id %}" class="btn btn-outline-primary btn-sm">More Info</a>
+                        </div>
                     </div>
+                </div>
+            {% endfor %}
+        </div>
                     <!-- Pagination Controls -->
                     <div class="d-flex justify-content-center mt-4">
                         <nav aria-label="Page navigation">

@@ -16,6 +16,7 @@ import requests
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 import hashlib
+import random
 import os
 
 # Constants
@@ -322,3 +323,27 @@ def unfollow_user(request, user_id):
         messages.info(request, f"You were not following {target_user.username}.")
 
     return redirect('profile')
+
+def index(request):
+    # Fetch events from both sources
+    career_events = get_calendar_events()  # From Google
+    mindfulness_events = get_mindfulness_events()  # From Localist
+
+    # Combine and sort events by start time
+    all_events = career_events + mindfulness_events
+    all_events.sort(key=lambda e: e['start_time'])  # Sort events by earliest start time
+
+    # Implement pagination for "All Events"
+    paginator = Paginator(all_events, 6)  # Show 6 events per page
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    # Select 3 random events for the "Recommended Events" section
+    recommended_events = random.sample(all_events, min(len(all_events), 3))
+
+    return render(request, 'index.html', {
+        'page_obj': page_obj,  # Paginated events for "All Events"
+        'mindfulness_events': mindfulness_events,  # For the Mindfulness tab
+        'career_events': career_events,  # For the Career tab
+        'recommended_events': recommended_events,  # For the Recommended section
+    })
