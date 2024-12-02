@@ -180,8 +180,7 @@
         <div class="container my-4">
             <form method="GET" action="">
                 <div class="input-group">
-                    <input type="text" name="q" class="form-control" placeholder="Search events by title or location"
-                           value="{{ request.GET.q|default:'' }}">
+                    <input type="text" name="q" class="form-control" placeholder="Search events by title or location" value="{{ query }}">
                     <div class="input-group-append">
                         <button class="btn btn-primary" type="submit">Search</button>
                     </div>
