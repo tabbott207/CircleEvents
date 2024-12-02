@@ -326,14 +326,22 @@ def unfollow_user(request, user_id):
 
 def index(request):
     # Fetch events from both sources
-    career_events = get_calendar_events()  # From Google
-    mindfulness_events = get_mindfulness_events()  # From Localist
+    career_events = get_calendar_events()
+    mindfulness_events = get_mindfulness_events()
 
     # Combine and sort events by start time
     all_events = career_events + mindfulness_events
-    all_events.sort(key=lambda e: e['start_time'])  # Sort events by earliest start time
+    all_events.sort(key=lambda e: e['start_time'])
 
-    # Implement pagination for "All Events"
+    # Search functionality
+    query = request.GET.get('q', '')  # Get the query parameter
+    if query:
+        all_events = [
+            event for event in all_events
+            if query.lower() in event.get('title', '').lower() or query.lower() in event.get('location', '').lower()
+        ]
+
+    # Implement pagination
     paginator = Paginator(all_events, 6)  # Show 6 events per page
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
@@ -342,8 +350,10 @@ def index(request):
     recommended_events = random.sample(all_events, min(len(all_events), 3))
 
     return render(request, 'index.html', {
-        'page_obj': page_obj,  # Paginated events for "All Events"
-        'mindfulness_events': mindfulness_events,  # For the Mindfulness tab
-        'career_events': career_events,  # For the Career tab
-        'recommended_events': recommended_events,  # For the Recommended section
+        'page_obj': page_obj,  # Paginated events
+        'mindfulness_events': mindfulness_events,  # Still passed for the mindfulness tab
+        'career_events': career_events,  # Still passed for the career tab
+        'recommended_events': recommended_events,  # Recommended events section
+        'query': query,  # Pass the query back to the template
     })
+
