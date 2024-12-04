@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import date
+from django.conf import settings
+
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
@@ -42,6 +44,12 @@ class Profile(models.Model):
         symmetrical=False,  # Following is not necessarily reciprocal
         related_name='following',  # Reverse relation for "following"
         blank=True  # Optional field
+    )
+    picture = models.URLField(
+        blank=True,
+        null=True,
+        default=f"{settings.STATIC_URL}img/logo-new.png",
+        help_text="URL to the user's profile picture"
     )
 
     def __str__(self):
