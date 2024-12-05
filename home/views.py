@@ -18,6 +18,11 @@ from django.contrib.auth.decorators import login_required
 import hashlib
 import random
 import os
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.db import IntegrityError
+from .models import Profile
 
 # Constants
 EMAIL_SENDER = settings.EMAIL_HOST_USER
@@ -25,6 +30,39 @@ GOOGLE_CALENDAR_ID = 'cci-events@uncc.edu'
 SERVICE_ACCOUNT_FILE = os.path.join(settings.BASE_DIR, 'home/keys', 'soy-involution-442301-f9-e9fd74c6c65c.json')
 GOOGLE_RECAPTCHA_SECRET_KEY = settings.GOOGLE_RECAPTCHA_SECRET_KEY
 LOCALIST_API_URL = "https://campusevents.charlotte.edu/api/2/events?group_id=Health%20and%20Wellbeing"
+
+def index(request):
+    # Fetch events from both sources
+    career_events = get_calendar_events()
+    mindfulness_events = get_mindfulness_events()
+
+    # Combine and sort events by start time
+    all_events = career_events + mindfulness_events
+    all_events.sort(key=lambda e: e['start_time'])
+
+    # Search functionality
+    query = request.GET.get('q', '')  # Get the query parameter
+    if query:
+        all_events = [
+            event for event in all_events
+            if query.lower() in event.get('title', '').lower() or query.lower() in event.get('location', '').lower()
+        ]
+
+    # Implement pagination
+    paginator = Paginator(all_events, 6)  # Show 6 events per page
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    # Select 3 random events for the "Recommended Events" section
+    recommended_events = random.sample(all_events, min(len(all_events), 3))
+
+    return render(request, 'index.html', {
+        'page_obj': page_obj,  # Paginated events
+        'mindfulness_events': mindfulness_events,  # Still passed for the mindfulness tab
+        'career_events': career_events,  # Still passed for the career tab
+        'recommended_events': recommended_events,  # Recommended events section
+        'query': query,  # Pass the query back to the template
+    })
 
 # Helper function to fetch Google Calendar events
 def get_calendar_events():
@@ -143,12 +181,18 @@ def signin(request):
     return render(request, 'signin.html')
 
 # View: User Sign-Up
+
 def signup(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         email = request.POST.get('email')
         firstname = request.POST.get('firstname', '')
+
+        # Input validation
+        if not username or not password or not email:
+            messages.error(request, "All fields are required.")
+            return redirect('signup')
 
         # Check if username or email already exists
         if User.objects.filter(username=username).exists():
@@ -163,18 +207,20 @@ def signup(request):
             user = User.objects.create_user(username=username, password=password, email=email, first_name=firstname)
             user.save()
 
-            # Create an empty profile
-            Profile.objects.create(user=user)
+            # Profile creation handled by signals.py
+            messages.success(request, "Account created successfully! Please update your profile.")
 
             # Authenticate and log the user in
             user = authenticate(username=username, password=password)
             if user:
                 login(request, user)
-                messages.success(request, "Account created successfully! Please update your profile.")
-                return redirect('profile')  # Redirect to profile page
+                return redirect('home')  # Redirect to profile page
 
+        except IntegrityError:
+            messages.error(request, "Account creation failed due to a database error.")
         except Exception as e:
-            messages.error(request, f"Error creating account: {e}")
+            messages.error(request, f"An unexpected error occurred: {e}")
+
     return render(request, 'signup.html')
 
 # View: Contact Form
@@ -217,7 +263,7 @@ def contact(request):
                 )
             except Exception as e:
                 messages.error(request, f"Error sending email: {e}")
-            return redirect('index')
+            return redirect('home')
         else:
             messages.error(request, "Invalid reCAPTCHA. Please try again.")
             return redirect('contact')
@@ -272,6 +318,7 @@ def profile(request):
         # Update User fields
         user.username = request.POST.get('username', user.username)
         user.email = request.POST.get('email', user.email)
+        user.first_name = request.POST.get('first_name', user.first_name)  # Capture and update first_name
         user.save()
 
         # Update Profile fields
@@ -280,47 +327,40 @@ def profile(request):
         profile.save()
 
         messages.success(request, "Profile updated successfully!")
-        return redirect('/')  # Redirect back to the profile page
+        return redirect('home')  # Redirect to home after updating
 
-    # Get following for template
-    following = profile.following.all()
+    # Get followers, following, and suggestions for the template
+    followers = profile.get_followers()
+    following = profile.get_following()
+    suggestions = profile.suggest_followers_based_on_concentration()
 
+    # Render template with context
     return render(request, 'profile.html', {
         'user': user,
-        'profile': profile,  # Add profile to the context
+        'profile': profile,
+        'followers': followers,
+        'following': following,
+        'suggestions': suggestions,
     })
 
 
-def index(request):
-    # Fetch events from both sources
-    career_events = get_calendar_events()
-    mindfulness_events = get_mindfulness_events()
+@login_required
+def follow_user(request, user_id):
+    user_to_follow = get_object_or_404(User, id=user_id)
+    profile = request.user.profile
 
-    # Combine and sort events by start time
-    all_events = career_events + mindfulness_events
-    all_events.sort(key=lambda e: e['start_time'])
+    if user_to_follow != request.user:
+        profile.following.add(user_to_follow.profile)  # Assuming you have a many-to-many relation
+        messages.success(request, f"You are now following {user_to_follow.username}.")
 
-    # Search functionality
-    query = request.GET.get('q', '')  # Get the query parameter
-    if query:
-        all_events = [
-            event for event in all_events
-            if query.lower() in event.get('title', '').lower() or query.lower() in event.get('location', '').lower()
-        ]
+    return redirect('profile')
 
-    # Implement pagination
-    paginator = Paginator(all_events, 6)  # Show 6 events per page
-    page_number = request.GET.get('page', 1)
-    page_obj = paginator.get_page(page_number)
+def unfollow_user(request, user_id):
+    user_to_unfollow = get_object_or_404(User, id=user_id)
+    profile = request.user.profile
 
-    # Select 3 random events for the "Recommended Events" section
-    recommended_events = random.sample(all_events, min(len(all_events), 3))
+    if user_to_unfollow != request.user:
+        profile.following.remove(user_to_unfollow.profile)  # Assuming you have a many-to-many relation
+        messages.success(request, f"You have unfollowed {user_to_unfollow.username}.")
 
-    return render(request, 'index.html', {
-        'page_obj': page_obj,  # Paginated events
-        'mindfulness_events': mindfulness_events,  # Still passed for the mindfulness tab
-        'career_events': career_events,  # Still passed for the career tab
-        'recommended_events': recommended_events,  # Recommended events section
-        'query': query,  # Pass the query back to the template
-    })
-
+    return redirect('profile')
