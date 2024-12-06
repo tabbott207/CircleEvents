@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import date
+from django.conf import settings
+
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
@@ -31,18 +33,45 @@ class EventPage(models.Model):
 
     def __str__(self):
         return self.title
-    
+
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Links to the User model
-    major = models.CharField(max_length=100, default="CCI", editable=False)  # Default value, non-editable
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    major = models.CharField(max_length=100, default="CCI", editable=False)
     concentration = models.CharField(max_length=100, blank=True, null=True)
-    followers = models.ManyToManyField(
-        'self',  # Refers to the same Profile model
-        symmetrical=False,  # Following is not necessarily reciprocal
-        related_name='following',  # Reverse relation for "following"
-        blank=True  # Optional field
+
+    picture = models.URLField(
+        blank=True,
+        null=True,
+        default=f"{settings.STATIC_URL}img/logo-new.png",
+        help_text="URL to the user's profile picture"
+    )
+
+    # Define relationships using 'related_name' to distinguish the fields
+    following = models.ManyToManyField(
+        'self',
+        symmetrical=False,
+        related_name='followers',
+        blank=True
     )
 
     def __str__(self):
         return self.user.username
+
+    def get_followers(self):
+        """Return profiles of users who follow this user."""
+        return self.followers.all()
+
+    def get_following(self):
+        """Return profiles this user is following."""
+        return self.following.all()
+
+    def suggest_followers_based_on_concentration(self):
+        """Suggest profiles to follow based on similar concentration."""
+        if not self.concentration:
+            return Profile.objects.none()
+
+        # Exclude the current user and already-followed profiles
+        return Profile.objects.filter(
+            concentration=self.concentration
+        ).exclude(id=self.id).exclude(id__in=self.following.values_list('id', flat=True))
