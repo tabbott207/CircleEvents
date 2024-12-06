@@ -1,0 +1,9 @@
+.DS_Store
+.DS_Store
+/env
+/Circle/__pycache__
+/home/__pycache__
+/home/migrations/__pycache__
+/env
+/.idea
+/Circle/__pycache__
