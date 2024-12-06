@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+<link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css"/>
+
 {% block title %} Home {% endblock title %}
 
 {% block nav1link %}
@@ -42,7 +44,7 @@
 
 {% block nav4 %}
     {% if user.is_authenticated %}
-        Logout
+        LogOut
     {% endif %}
 {% endblock nav4 %}
 

@@ -1,10 +1,14 @@
 .DS_Store
 .DS_Store
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7e4978ed (Revert "Merge pull request #2 from tabbott207/adding-profile-image")
 /env
 /Circle/__pycache__
 /home/__pycache__
 /home/migrations/__pycache__
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 05631b10 (Revert "gitignore")
@@ -19,3 +23,8 @@
 =======
 /Circle/__pycache__
 >>>>>>> cb99d85b (Update .gitignore)
+=======
+/env
+/.idea
+/Circle/__pycache__
+>>>>>>> 7e4978ed (Revert "Merge pull request #2 from tabbott207/adding-profile-image")
