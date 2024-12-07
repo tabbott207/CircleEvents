@@ -22,6 +22,7 @@
       {% endfor %}
     </div>
     {% endif %}
+
     <h2>Sign Up</h2>
     <form method="POST" action="{% url 'signup' %}">
       {% csrf_token %}
@@ -41,12 +42,16 @@
         <span>Password</span>
         <input type="password" name="password" placeholder="Choose a password" required>
       </label>
-      <button class="submit" type="submit">Sign Up</button>
+      <button class="submit btn btn-primary btn-block" type="submit">Sign Up</button>
     </form>
+
     <p>Already have an account?</p>
     <a href="{% url 'signin' %}" class="btn-submit-link">Sign In</a>
+    <p>Want to explore events?</p>
+    <a href="{% url 'home' %}" class="btn-submit-link">Explore Events</a>
   </div>
 
+ 
   <!-- Bootstrap JS (for dismissible alerts) -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
