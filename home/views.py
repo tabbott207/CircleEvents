@@ -267,17 +267,12 @@ def generate_event_id(event):
 def profile(request):
     user = request.user
     profile, created = Profile.objects.get_or_create(user=user)
-    followers = profile.followers.all()
-
-    # Suggest people with the same major if no followers
-    suggestions = None
-    if not followers.exists():
-        suggestions = Profile.objects.filter(major=profile.major).exclude(user=user)
 
     if request.method == 'POST':
         # Update User fields
         user.username = request.POST.get('username', user.username)
         user.email = request.POST.get('email', user.email)
+        user.first_name = request.POST.get('first_name', user.first_name)  # Capture and update first_name
         user.save()
 
         # Update Profile fields
@@ -286,17 +281,22 @@ def profile(request):
         profile.save()
 
         messages.success(request, "Profile updated successfully!")
-        return redirect('profile')  # Redirect back to the profile page
+        return redirect('home')  # Redirect to home after updating
 
-    # Get following for template
-    following = profile.following.all()
+    # Get followers, following, and suggestions for the template
+    followers = profile.get_followers()
+    following = profile.get_following()
+    suggestions = profile.suggest_followers_based_on_concentration()
 
+    # Render template with context
     return render(request, 'profile.html', {
         'user': user,
+        'profile': profile,
         'followers': followers,
         'following': following,
         'suggestions': suggestions,
     })
+
 
 @login_required
 def follow_user(request, user_id):
