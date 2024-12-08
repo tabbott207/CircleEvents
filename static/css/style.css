@@ -8,9 +8,7 @@
 
 body {
   width: 100%;
-  height: 100%;
-  flex: 1;
-  overflow-y: scroll; 
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -93,9 +91,7 @@ button {
 
 /* Styling for signin and signup containers */
 .form-container {
-  position: relative;
-  max-height: 90vh; 
-  overflow-y: auto; 
+  position: fixed;
   width: 400px;
   max-width: 100%;
   background: #fff;
@@ -125,7 +121,78 @@ button {
   height: 40px;
 }
 
-/* Buttons styled as links */
+/* Separate styles for the signin form */
+.signin-form {
+  padding: 20px;
+  transform: translateX(200px)
+}
+
+.signin-form .forgot-pass {
+  margin-top: 10px;
+}
+
+.signin-form .signup-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #505f75;
+}
+
+.signin-form .signup-link a {
+  color: #7579ff;
+  text-decoration: none;
+}
+
+.signin-form .signup-link a:hover {
+  text-decoration: underline;
+}
+
+/* Separate styles for the signup form */
+.signup-form {
+  margin: 0 auto; /* Center the form horizontally */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.signup-form .forgot-pass {
+  margin-top: 10px;
+}
+
+.signup-form .signin-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #505f75;
+}
+
+.signup-form .signin-link a {
+  color: #7579ff;
+  text-decoration: none;
+}
+
+.signup-form .signin-link a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive design for smaller devices */
+@media (max-width: 768px) {
+  .form-container {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .social-media img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Ensure the 'Sign In' link matches the button */
 .form-container a.btn-submit-link {
   display: block;
   margin: 20px auto;
@@ -146,17 +213,4 @@ button {
 .form-container a.btn-submit-link:hover {
   background: -webkit-linear-gradient(left, #b224ef, #7579ff);
   background: linear-gradient(to right, #b224ef, #7579ff);
-}
-
-/* Responsive design for smaller devices */
-@media (max-width: 768px) {
-  .form-container {
-    width: 90%;
-    padding: 20px;
-  }
-
-  .social-media img {
-    width: 30px;
-    height: 30px;
-  }
 }
