@@ -42,11 +42,20 @@
     {% endif %}
 {% endblock nav4link %}
 
+{% block nav5link %}
+    /mood
+{% endblock nav5link %}
+
+{% block nav5 %}
+    Explore Your Mood
+{% endblock nav5 %}
+
 {% block nav4 %}
     {% if user.is_authenticated %}
         LogOut
     {% endif %}
 {% endblock nav4 %}
+
 
 {% block body %}
     
