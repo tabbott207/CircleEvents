@@ -357,3 +357,39 @@ def index(request):
         'query': query,  # Pass the query back to the template
     })
 
+
+def mood_page(request):
+    # Define moods and their corresponding emojis
+    moods = {
+        'Angry': '😡',
+        'Excited': '🤩',
+        'Depressed': '😢',
+        'Anxious': '😟',
+        'Good': '😎',
+        'Happy': '😊',
+        'Sad': '😭',
+        'Shy': '🙈',
+        'Tired': '😴',
+    }
+
+    # Get the selected mood from the query parameters
+    selected_mood = request.GET.get('mood', None)
+    selected_emoji = moods.get(selected_mood)  # Get the emoji for the selected mood
+    quote = None
+
+    if selected_mood:
+        # Fetch a quote using ZenQuotes API
+        response = requests.get("https://zenquotes.io/api/random")
+        if response.status_code == 200:
+            data = response.json()
+            quote = data[0]['q'] if len(data) > 0 else "No quote available."
+
+    # Context to pass to the template
+    context = {
+        'selected_mood': selected_mood,
+        'selected_emoji': selected_emoji,
+        'quote': quote,
+        'moods': moods,  # Include the moods dictionary for displaying mood options
+    }
+
+    return render(request, 'mood.html', context)
