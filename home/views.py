@@ -163,8 +163,6 @@ def signup(request):
             user = User.objects.create_user(username=username, password=password, email=email, first_name=firstname)
             user.save()
 
-            # Create an empty profile
-            Profile.objects.create(user=user)
 
             # Authenticate and log the user in
             user = authenticate(username=username, password=password)
