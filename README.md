@@ -3,7 +3,6 @@
 > https://realpython.com/installing-python/
 ### 2. Clone this repo into your local machine 
 > git clone https://github.com/tabbott207/CircleEvents
-<<<<<<< HEAD
 ### 3. CD into CircleEvents and set up VirtualEnv
 > pip3 install virtualenv
 > 
@@ -18,7 +17,6 @@
 ### 5. Install required dependencies
 > pip3 install -r requirements.txt
 ### 6. Final Step
-=======
 ### 3. Install VirtualEnv
 >pip install virtualenv
 >
