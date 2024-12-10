@@ -35,7 +35,6 @@
 ### 4. Install required dependencies
 > pip install -r requirements.txt
 ### 5. Final Step
->>>>>>> 71bb607a (update readme)
 > go to the directory where manage.py is located and run the following command
 >
 >python manage.py runserver
