@@ -7,7 +7,7 @@
   {% if user.is_authenticated %}
     /  
   {% else %}
-    /login
+      /signin
   {% endif %}
 
 {% endblock nav2link %}
@@ -53,7 +53,7 @@
 {% block nav4 %} 
 
   {% if user.is_authenticated %}
-    LogOut
+    Logout
   {% endif %}
 
 {% endblock nav4 %}

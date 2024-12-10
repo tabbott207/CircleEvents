@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from home.models import Contact, EventPage
-from django.contrib import messages
-from django.db.models import Q
 from django.contrib.auth.models import User, auth
 from django.contrib.auth import authenticate, login
 from django.core.mail import send_mail
@@ -10,14 +8,16 @@ from django.utils.html import strip_tags
 from django.conf import settings
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
-from .models import Profile
 from datetime import datetime
 import requests
 from django.core.paginator import Paginator
-from django.contrib.auth.decorators import login_required
 import hashlib
 import random
 import os
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import Profile, RSVP, Event
 
 # Constants
 EMAIL_SENDER = settings.EMAIL_HOST_USER
@@ -391,3 +391,43 @@ def mood_page(request):
     }
 
     return render(request, 'mood.html', context)
+
+
+@login_required
+def rsvp_event(request, event_id):
+    if request.method == "POST":
+        event = get_object_or_404(Event, id=event_id)  # Works with custom IDs
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        comments = request.POST.get("comments", "")
+
+        # Save RSVP details
+        RSVP.objects.create(
+            user=request.user,
+            event=event,
+            name=name,
+            email=email,
+            comments=comments,
+        )
+        return redirect("rsvp_event_page", event_id=event_id)
+    return redirect("home")
+
+
+@login_required
+def rsvp_event_page(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        comments = request.POST.get("comments", "")
+
+        # Save RSVP details here (if necessary)
+        # Example:
+        # RSVP.objects.create(user=request.user, event=event, name=name, email=email, comments=comments)
+
+        return redirect('event_detail', event_id=event.id)
+
+    # Render the RSVP form for the given event
+    return render(request, 'rsvp_form.html', {'event': event})
+
