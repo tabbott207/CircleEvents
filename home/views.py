@@ -12,7 +12,10 @@ from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from .models import Profile
 from datetime import datetime
+from .models import Concentration
+from django.core.paginator import Paginator
 import requests
+from .utils import get_recommendations
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 import hashlib
@@ -275,7 +278,16 @@ def profile(request):
 
         # Update Profile fields
         profile.major = request.POST.get('major', profile.major)
-        profile.concentration = request.POST.get('concentration', profile.concentration)
+
+        concentration_name = request.POST.get('concentration')
+        if concentration_name:
+            try:
+                concentration = Concentration.objects.get(name=concentration_name)
+                profile.concentration = concentration
+            except Concentration.DoesNotExist:
+                messages.error(request, "Invalid concentration selected.")
+                return redirect('profile')
+
         profile.save()
 
         messages.success(request, "Profile updated successfully!")
@@ -285,6 +297,7 @@ def profile(request):
     followers = profile.get_followers()
     following = profile.get_following()
     suggestions = profile.suggest_followers_based_on_concentration()
+    concentrations = Concentration.objects.all()
 
     # Render template with context
     return render(request, 'profile.html', {
@@ -293,6 +306,7 @@ def profile(request):
         'followers': followers,
         'following': following,
         'suggestions': suggestions,
+        'concentrations': concentrations,
     })
 
 
@@ -355,6 +369,21 @@ def index(request):
         'query': query,  # Pass the query back to the template
     })
 
+def event_recommendations(request):
+    if not request.user.is_authenticated:
+        return render(request, 'not_authenticated.html')
+
+    recommendations = get_recommendations(request.user)
+    paginator = Paginator(recommendations, 6)  # Show 6 events per page
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'recommendations.html', {
+        'page_obj': page_obj,  # Paginated recommendations
+    })
+
+
+    return render(request, 'recommendations.html', {'page_obj': page_obj})
 
 def mood_page(request):
     # Define moods and their corresponding emojis

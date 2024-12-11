@@ -7,6 +7,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here
+CONCENTRATION_CHOICES = [
+    "Software Engineering",
+    "Data Science",
+    "Software Systems",
+    "Cybersecurity",
+    "Web and Mobile Applications",
+    "AI Robotics and Gaming",
+]
 
 class Contact(models.Model):
     name= models.CharField(max_length=122)
@@ -19,11 +27,13 @@ class Contact(models.Model):
 
 class EventPage(models.Model):
     id = models.UUIDField( primary_key = True, default = uuid.uuid4, editable = False)
-    title= models.CharField(max_length=122)
+    title= models.CharField(max_length=225)
     header= models.CharField(max_length=122)
-    desc= models.TextField()
+    description= models.TextField()
+    matched_categories = models.JSONField(default=list, blank=True)  #stores matched categories on a list
     created_at = models.DateTimeField(auto_now_add=True)
     location= models.TextField(default='')
+    similarity_scores = models.FloatField(default=0.0)
     tag= models.CharField(max_length=122, default='')
     eventdate = models.IntegerField(default=1)
     eventday = models.TextField(default="")
@@ -34,11 +44,27 @@ class EventPage(models.Model):
     def __str__(self):
         return self.title
 
+class Concentration(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    code = models.CharField(max_length=10, unique=True, null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        if not self.code:
+            self.code = str(uuid.uuid4())[:8]  # Generate a unique 8-character code
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+    
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    major = models.CharField(max_length=100, default="CCI", editable=False)
-    concentration = models.CharField(max_length=100, blank=True, null=True)
+    major = models.CharField(max_length=225, default="CCI", editable=False)
+    concentration = models.ForeignKey(
+        Concentration,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
 
     picture = models.URLField(
         blank=True,

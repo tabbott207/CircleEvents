@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommended Events</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<style>
+    body {
+        background-color: #87c9ff !important; 
+        background-image: none !important; /* Remove any background imaging*/
+    }
+</style>
+
+<body>
+    <div class="container py-4">
+        <h2 class="text-center text-dark mb-4">Recommended Events</h2>
+
+        <!-- Search Bar -->
+        <form method="GET" action="" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Search recommended events" value="{{ query }}">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Recommended Events -->
+        <div class="row">
+            {% for event in page_obj %}
+                <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                    <div class="card h-100 shadow-sm border-0 rounded">
+                        <img src="{{ event.photo_url|default:'https://pbs.twimg.com/profile_images/1428371752862720009/PKKG7xm1_400x400.jpg' }}" 
+                             class="card-img-top rounded-top img-fluid" 
+                             alt="{{ event.title }}">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-primary">{{ event.title }}</h5>
+                            <p class="text-muted mb-1"><i class="fas fa-calendar-alt"></i> {{ event.start_time }}</p>
+                            <p class="text-muted mb-2"><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
+                            <a href="{% url 'event_detail' event.id %}" class="btn btn-outline-primary btn-sm">More Info</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-center">No recommendations available at this time.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="d-flex justify-content-center mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" aria-label="First">
+                                First
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                &laquo; Previous
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                Next &raquo;
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                                Last
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

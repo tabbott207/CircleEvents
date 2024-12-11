@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "soy-involution-442301-f9",
+  "private_key_id": "acad59ea30353f406cc14b38f8dc2612305f7085",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDNPCm1quNssqfV\nLTPa/XxMgYQs4IUOFuXsxuk2P6522xLBwIlTpT1WQVRG3W6qBpVhpaQLUflCv8vr\nLhLPYxLmT+7Dx7aF2238i+s5DoMuCAiANuC6SfsGkMGWFiDMJAX/RUai70EOsN6x\ns27SzijEpzezdb3//sE6A5DnI4tHNDTPZqgUVR2kpAOm0pSXFqUwfL9OeYQz5gtF\n7Jwft6VdV8zTFbLb+VlFeW0XqhgDBrjhY2eqinRedTL9QM+1cQf5IpPm3UGGtOmu\nCfhhj4QI/2rDBxh9zBQkMJco4pfqvNNckL9uaZ6nDRDJ3+CrFV2gBK42s1fWrxH6\nl8eNrkXVAgMBAAECggEAUZ5efAfU3/KAuk96stliKE7NkMdNQtgqYiqMrm1O5aej\n4ve95UzugrICYRhInUd2+tlTzsiv1zLNVt8Azgb5iiw5qRRwavVj3S6LwioaUyEQ\nuGSapJstQGQrCJQOQQEGfYlAWSXK+puuRH82UJF6NxLFHRJzGC5pC7hFVRaWmh7a\nptzzXIXum79vk8PdZcXau2ZwZrtf8Cy+niEO9QeRkQXtBLyApF1Oi2G9sWM7HwtP\nR0ERAjKbX1vbtuAbHupLtt6+HKYG05Rsfko3TlHzgB4iFlxU/zFkP6Ov897Et/6s\neYIWzsfJtti/hjLVxtWSLtVG3YRgG/i/LFZOz2XytQKBgQD+AunhQM3K9+88Df0h\nUm9dqu516moJmlNhKrX+ET5JRes49/TTU535HJcv9V0qT6xxRO35uvZR4KFJlEQe\nvA7sIxDShWb1zbS1fLW7rVtug7AhRHnj9oa/8oT9LtSrX6fsXGtA8/IfSqVXCjOl\nFTeF4t7LMfN5NJfVRe60YDDsZwKBgQDO134Kopm/lolkIkYNWF1K3l4rPo+YWK4D\nDwvwPUM5DyYckRofGq5Yj20izw6KsEYmiyh9BTiYOPsLFXCdYNuOUu03Zvsb5sfD\nkAT3AlFvXXlOGyKrHkumb7B1LUBRE9CVUOuCdS0vwR56BZWzVT3swTW+N1oVk3T1\n6kkofr4WYwKBgQCSHpLz5Rd9HsscPN/Uf1tZAq9SXZrKE2DLkIpIsRqng/UgPGM1\n/e/uEahXCkqhwFtufTx4YDi6OQIPFZ9qHrxm0nUm5V6pH8BIdokEgWELXe2/9Wg4\n3uP9H0Gpc3sbaldq/G8mWi56GbKrM08qM95QwoVvVji9DKgbI7OBR6RdGQKBgQCh\nS8YMQRQoJRnqrhd2nKvTkGhazKRppu27kOY8Z2mee0O7DyQRkVrX0LDIbjLmz+NE\nd0wRghrKCdUqpYN2FmvgJqa5h2LWNTceN5bHkFU0xO2tjNeSHUPc/EfceHcpQoxr\ng/jDeODN1okPmn9Mo3Jwx5JDTSLApIaWpiZ6n6tYBQKBgBnXJxuF1cPgw7jEQc0v\nvvLFT48RiAL1/fmNKd78Us/UJQBVx7PyAmjNKGPmmRk62prcGON0TPsb/WXfImAI\nwNrF5VVihEyjkRVBlq8TltpSQTOKfLfSjNOYE7Ddio9YMtaprwD8SOfGoqL8PeO0\nS5k+5ka4loCsjNO5u8+/VKwX\n-----END PRIVATE KEY-----\n",
+  "client_email": "crcl-309@soy-involution-442301-f9.iam.gserviceaccount.com",
+  "client_id": "106318000349830312531",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/crcl-309%40soy-involution-442301-f9.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
