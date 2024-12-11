@@ -210,8 +210,43 @@ button {
   background: linear-gradient(to right, #7579ff, #b224ef);
 }
 
-
 .form-container a.btn-submit-link:hover {
   background: -webkit-linear-gradient(left, #b224ef, #7579ff);
   background: linear-gradient(to right, #b224ef, #7579ff);
+}
+
+/* Recommendations Page Styles */
+
+/* Padding for the page to prevent content from being cut off */
+body {
+  padding-top: 20px; /* Adjust as needed */
+}
+
+/* Container for recommended events */
+.recommended-events-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.pagination .step-links a {
+  margin: 0 5px;
+  text-decoration: none;
+  color: #007bff;
+}
+
+.pagination .step-links a:hover {
+  text-decoration: underline;
+}
+
+.pagination .current {
+  margin: 0 5px;
+  font-weight: bold;
 }

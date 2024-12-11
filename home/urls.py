@@ -16,6 +16,7 @@ urlpatterns = [
     path('follow/<int:user_id>/', views.follow_user, name='follow_user'),
     path('unfollow/<int:user_id>/', views.unfollow_user, name='unfollow_user'),
     path('mood/', views.mood_page, name='mood_page'),
-    path("rsvp/<str:event_id>/", views.rsvp_event, name="rsvp_event"),
-    path('rsvp/<str:event_id>/', views.rsvp_event_page, name='rsvp_event_page'),
+    path('recommendations/', views.event_recommendations, name='event_recommendations'),
+
+    
 ]

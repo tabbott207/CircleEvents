@@ -10,30 +10,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 
-<style>
-    .btn-submit-link {
-        display: block;
-        margin: 20px auto;
-        width: 100%;
-        height: 36px;
-        line-height: 36px; /* Align text vertically */
-        text-align: center; /* Align text horizontally */
-        border-radius: 30px;
-        color: #fff !important; /* Override potential color conflicts */
-        font-size: 15px;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        background: -webkit-linear-gradient(left, #7579ff, #b224ef);
-        background: linear-gradient(to right, #7579ff, #b224ef);
-    }
-</style>
-
 
 <body>
 <div class="container d-flex flex-column justify-content-center align-items-center min-vh-100">
-    <div class="card p-4"
-         style="width: 500px; border-radius: 15px; background-color: white; color: black; border: 4px solid black;">
+    <div class="card p-4" style="width: 500px; border-radius: 15px; background-color: white; color: black; border: 4px solid black;">
         {% if not selected_mood %}
             <h2 class="text-center mb-4">Choose how you're feeling today:</h2>
             <div class="row text-center pb-3">
@@ -52,7 +32,6 @@
                         </form>
                     </div>
                 {% endfor %}
-                <a href="{% url 'home' %}" class="btn-submit-link">Home</a>
             </div>
         {% else %}
             <h2 class="text-center mb-4">Since you're feeling {{ selected_mood }} {{ selected_emoji }}</h2>

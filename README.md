@@ -3,20 +3,6 @@
 > https://realpython.com/installing-python/
 ### 2. Clone this repo into your local machine 
 > git clone https://github.com/tabbott207/CircleEvents
-### 3. CD into CircleEvents and set up VirtualEnv
-> pip3 install virtualenv
-> 
-> python3 -m venv env
-> 
-> on MacOS/Linux: source env/bin/activate
-> 
-> on Windows: .\env\Scripts\activate
-
-### 4. Install django
-> pip3 install django
-### 5. Install required dependencies
-> pip3 install -r requirements.txt
-### 6. Final Step
 ### 3. Install VirtualEnv
 >pip install virtualenv
 >

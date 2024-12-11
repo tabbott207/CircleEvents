@@ -16,7 +16,7 @@
             font-weight: bold;
         }
 
-        .profile-form input {
+        .profile-form input, .profile-form select {
             width: 100%;
             padding: 8px;
             border: 1px solid rgba(109, 93, 93, 0.4);
@@ -97,8 +97,15 @@
         <div class="profile-field">
             <label>
                 <span>Concentration:</span>
-                <input type="text" name="concentration" value="{{ profile.concentration|default:'' }}"
-                       placeholder="Enter your concentration">
+                <select name="concentration" required>
+                    <option value="">-- Select Concentration --</option>
+                    {% for concentration in concentrations %}
+                        <option value="{{ concentration.name }}" 
+                            {% if profile.concentration and profile.concentration.name == concentration.name %}selected{% endif %}>
+                            {{ concentration.name }}
+                        </option>
+                    {% endfor %}
+                </select>
             </label>
         </div>
 
