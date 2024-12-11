@@ -210,6 +210,7 @@ button {
   background: linear-gradient(to right, #7579ff, #b224ef);
 }
 
+
 .form-container a.btn-submit-link:hover {
   background: -webkit-linear-gradient(left, #b224ef, #7579ff);
   background: linear-gradient(to right, #b224ef, #7579ff);
