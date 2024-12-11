@@ -77,7 +77,7 @@ class Command(BaseCommand):
     help = "Import events from Google Calendar and categorize them"
 
     def handle(self, *args, **kwargs):
-        SERVICE_ACCOUNT_FILE = r'C:\Users\owenb\OneDrive\Documents\CircleEvents\home\keys\soy-involution-442301-f9-acad59ea3035.json'  # Update with the actual path
+        SERVICE_ACCOUNT_FILE = os.path.join(settings.BASE_DIR, 'home/keys', 'circleapp-444305-20546ffa6de4.json')
         SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
         credentials = service_account.Credentials.from_service_account_file(
