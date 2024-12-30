@@ -32,6 +32,11 @@
                     </div>
                 {% endfor %}
             </div>
+            <!-- Back to Index Button -->
+            <div class="text-center mt-4">
+                <a href="{% url 'home' %}" class="btn btn-secondary" style="width: 100px;">Back</a>
+            </div>
+            </div>
         {% else %}
             <h2 class="text-center mb-4">Since you're feeling {{ selected_mood }} {{ selected_emoji }}</h2>
             <div class="quote-box text-center">
